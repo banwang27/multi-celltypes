@@ -1,0 +1,9 @@
+{
+  "__default__" :
+  {
+    "SCRIPTS_PATH" : "/scratch/users/banwang3/celllines/scripts",
+    "DATA_DIR" : "/scratch/users/banwang3/celllines/data/second_run/hiseq/fastqs",
+    "SET_NAME" : "RNA_hyrbids_attribute_MN_file.txt",
+    "RUN_ID" : "Blah",
+    "OVERHANG" : "149",
+  } }
