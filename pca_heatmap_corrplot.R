@@ -114,13 +114,13 @@ print(dim(abot))
 sabot = abot[order(apply(abot, 1, var), decreasing=TRUE),][1:1000,]
 colnames(sabot)=samples_all
 hc<-as.dist(1 - cor(t(sabot),method='pearson'))
-pdf(paste0(output_path,'heatmap_pearson_align2',align2,'.pdf'), useDingbats=FALSE)
+pdf(paste0(output_path,'heatmap_ASE_pearson_align2',align2,'.pdf'), useDingbats=FALSE)
 rownames(annotation)<-samples_all
 pheatmap(as.matrix(sabot),show_rownames=F,clustering_distance_rows = hc,main='Top 1000 genes with highest variances in log2(hum/chp) values\nGenes cluster by pearson correlation',annotation=annotation)
 dev.off()
 
 hc<-as.dist(1 - cor(t(sabot),method='spearman'))
-pdf(paste0(output_path,'heatmap_spearman_align2',align2,'.pdf'), useDingbats=FALSE)
+pdf(paste0(output_path,'heatmap_ASE_spearman_align2',align2,'.pdf'), useDingbats=FALSE)
 rownames(annotation)<-colnames(sabot)
 pheatmap(as.matrix(sabot),show_rownames=F,clustering_distance_rows = hc,main='Top 1000 genes with highest variances in log2(hum/chp) values\nGenes cluster by spearman correlation',annotation=annotation)
 dev.off()
@@ -173,13 +173,13 @@ print(dim(abot))
 sabot = abot[order(apply(abot, 1, var), decreasing=TRUE),][1:1000,]
 colnames(sabot)=samples_all
 hc<-as.dist(1 - cor(t(sabot),method='pearson'))
-pdf(paste0(output_path,'heatmap_pearson_align2',align2,'.pdf'), useDingbats=FALSE)
+pdf(paste0(output_path,'heatmap_allcounts_pearson_align2',align2,'.pdf'), useDingbats=FALSE)
 rownames(annotation)<-samples_all
 pheatmap(as.matrix(sabot),show_rownames=F,clustering_distance_rows = hc,main='Top 1000 genes with highest variances in log2(hum/chp) values\nGenes cluster by pearson correlation',annotation=annotation)
 dev.off()
 
 hc<-as.dist(1 - cor(t(sabot),method='spearman'))
-pdf(paste0(output_path,'heatmap_spearman_align2',align2,'.pdf'), useDingbats=FALSE)
+pdf(paste0(output_path,'heatmap_allcounts_spearman_align2',align2,'.pdf'), useDingbats=FALSE)
 rownames(annotation)<-colnames(sabot)
 pheatmap(as.matrix(sabot),show_rownames=F,clustering_distance_rows = hc,main='Top 1000 genes with highest variances in log2(hum/chp) values\nGenes cluster by spearman correlation',annotation=annotation)
 dev.off()
