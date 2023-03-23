@@ -60,7 +60,6 @@ dCAcutoff=0.75
 idx = which(final$dEE>= dEEcutoff & final$dCA>= dCAcutoff)
 final1 = final[idx,]
 final1=final1[order(final1$celltype,-abs(final1$ATAC_lfc)),]
-final1$HARcontain=ifelse(final1$peak_id %in% HARs$peak_id,T,F) 
 final2 = final1[final1$samedirection==T,]
 write.table(final1,file=paste0('TS_list_ATAC_RNA_dEEgreaterorequalthan',dEEcutoff,'_dCAgreaterorequalthan',dCAcutoff,'.txt'),quote=F,sep='\t',row.names=F,col.names=T)
 write.table(final2,file=paste0('TS_list_ATAC_RNA_dEEgreaterorequalthan',dEEcutoff,'_dCAgreaterorequalthan',dCAcutoff,'_samedirection.txt'),quote=F,sep='\t',row.names=F,col.names=T)
