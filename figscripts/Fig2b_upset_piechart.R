@@ -49,4 +49,21 @@ upset(
     )
 dev.off()
 
-
+df$sum=rowSums(df[,-1])
+data=data.frame(df %>% group_by(sum) %>% summarise(n=n()))
+data <- data %>% 
+  arrange(desc(sum)) %>%
+  mutate(prop = n / sum(data$n) *100) %>%
+  mutate(ypos = cumsum(prop)- 0.5*prop )
+data$perc=paste0(signif(data$n/nrow(df)*100,4),'%')  
+data$sum=factor(data$sum,levels=seq(1,6)) 
+data$lab=paste0(data$sum,'\n(',data$n,')')
+pdf(paste0(output_path,'ASE_piechart.pdf'), width=4,height=4,useDingbats=FALSE)   
+ggplot(data, aes(x="", y=prop, fill=sum)) +
+  geom_bar(stat="identity", width=1, color="black") +
+  coord_polar("y", start=0) +
+  theme_void() + 
+  geom_text(aes(y = ypos, label = lab), color = "black", size=2.8)+ 
+  scale_fill_brewer(type="seq",palette=3)+
+  theme(legend.position="none")  
+dev.off()
