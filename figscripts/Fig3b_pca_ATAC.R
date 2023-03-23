@@ -32,17 +32,14 @@ cond_ChiHum<-str_split_fixed(sub_files, "_", 7)[,4]
 cond_ChiHum<-factor(cond_ChiHum,level=c("Human","Chimp"))
 annotation<-data.frame(allele=cond_ChiHum,hybrid=Hybs,cellType=celltypes)
 data<-rld
-sabot=data[order(apply(data, 1, var), decreasing=TRUE),][1:1000,]
+sabot=data[order(apply(data, 1, var), decreasing=TRUE),]
 colnames(sabot)=sub_files
 hc<-as.dist(1 - cor(t(sabot),method='pearson'))
-
-
 annoCol<-list(allele=c(Human="indianred1", Chimp="dodgerblue1"),
               hybrid=c(Hyb1="#6959cd",Hyb2="#3cb371"),
               cellType=c(CM="#86B875",HP="#E495A5",PP="#C7A76C",MN="#39BEB1",SKM="#7DB0DD"))
 output_path='/scratch/users/banwang3/celllines/scripts/RScripts/Rplots11/'
 pdf(paste0(output_path,'heatmap_pearson_rlog_ATAC_align2',align2,'.pdf'), useDingbats=FALSE)
-
 rownames(annotation)<-colnames(sabot)
 pheatmap(as.matrix(sabot),
          show_rownames=F,
@@ -51,10 +48,8 @@ pheatmap(as.matrix(sabot),
          annotation_colors = annoCol,
          clustering_distance_rows = hc,
          treeheight_row=0)
-         #main='Top 1000 genes with highest variances in rlog\nGenes cluster by pearson correlation')
 dev.off()
 
-data<-rld[,c(1:ncol(valMat))]
 data<-rld
 data = data[which(apply(data, 1, var) != 0) ,]
 pca_res = prcomp(t(data), scale=TRUE, center=TRUE)
