@@ -73,7 +73,7 @@ colnames(df)=c("PC1","PC2","cellType","Allele")
 pdf(paste0(output_path,'pca_rlog_align2',Aligned2,'.pdf'), useDingbats=FALSE)
 ggplot(df, aes(x=PC1, y=PC2, shape=Allele, colour=cellType)) +
     scale_color_manual(breaks=c("CM","HP","PP","MN","SKM","RPE"),values=c("#86B875","#E495A5","#C7A76C","#39BEB1","#7DB0DD","#CD99D8")) +
-    labs(x = paste0("PCA 1 (", round(s$importance[2]*100, 2), "%)"), y = paste0("PCA 2 (", round(s$importance[5]*100, 2), "%)")) +
+    labs(x = paste0("PC1 (", round(s$importance[2]*100, 2), "%)"), y = paste0("PC2 (", round(s$importance[5]*100, 2), "%)")) +
     geom_point(size=3)+theme_bw()
 dev.off()
 cts<-unique(celltypes)
@@ -95,7 +95,7 @@ for (celltype in cts){
     pdf(paste0(output_path,'pca_rlog_',celltype,'_align2',Aligned2,'.pdf'), useDingbats=FALSE)
     print(ggplot(df, aes(x=PC1, y=PC2, shape=Allele, colour=hybridLine)) +
         scale_color_manual(breaks=c("Hyb1","Hyb2"),values=c("#6959cd","#3cb371")) +
-          labs(x = paste0("PCA 1 (", round(s$importance[2]*100, 2), "%)"), y = paste0("PCA 2 (", round(s$importance[5]*100, 2), "%)")) +
+          labs(x = paste0("PC1 (", round(s$importance[2]*100, 2), "%)"), y = paste0("PC2 (", round(s$importance[5]*100, 2), "%)")) +
         geom_point(size=5)+theme_bw())
     dev.off()
 }
