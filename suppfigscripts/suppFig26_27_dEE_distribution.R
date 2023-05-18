@@ -25,6 +25,7 @@ p<-ggplot(final, aes(x=dEE,fill = ASElab)) +
     #geom_freqpoly(binwidth=500)+
     facet_wrap(~celltype,scales="free_y")+
     theme_bw()+
+    xlab('dEE')+
     #scale_y_continuous(trans='log10')+
     guides(fill=guide_legend(title=""))+
     theme(legend.position="top",panel.grid.major=element_blank(),panel.grid.minor=element_blank())
@@ -51,9 +52,10 @@ p<-ggplot(final, aes(x=dEE,fill = ASElab)) +
     geom_histogram(bins=100)+
     facet_wrap(~celltype,scales="free_y")+
     theme_bw()+
+    xlab('dCAE')+
     guides(fill=guide_legend(title=""))+
     theme(legend.position="top",panel.grid.major=element_blank(),panel.grid.minor=element_blank())
-pdf(paste0(output_path,'dEE_',keyword,'_distribution.pdf'),useDingbats=FALSE,width=6,height=5)
+pdf(paste0(output_path,'dCAE_',keyword,'_distribution.pdf'),useDingbats=FALSE,width=6,height=5)
 print(p) 
 dev.off()
 
