@@ -1,8 +1,6 @@
 library(DESeq2)
 library(stringr)
 library(ggplot2)
-#library(scales)
-#cell_type<-'SKM'
 Aligned2='human'
 all_files = list.files(paste0('/scratch/users/banwang3/celllines/analysis/ASE_norm/',Aligned2,'/'))
 sub_files = all_files[grep('_ase_normalized.txt', all_files)]
