@@ -26,13 +26,7 @@ for (celltype in celltypes){
     }
     targetgenedf = rbind(targetgenedf,subdf)
 }
-for (celltype in celltypes){
-    idx = grep(celltype,colnames(df))
-    tmp = cbind(tmp,rowMeans(df[,idx]))
-}
-colnames(tmp)=celltypes
-tmp = data.frame(tmp)
-tmp$gene=df$gene
+
 df1 = df[df$gene %in% targetgenedf$target_genes,]
 genenames=df1$gene
 target_genes=genenames
