@@ -25,11 +25,11 @@ for (i in seq(1,nrow(tmp2))){
     for (celltype in c('CM','MN','PP','HP','SKM','RPE')){
         coln=paste0(celltype,'_lfc')
         flagn=paste0(celltype,'_FDR')
-        if(tmp2[i,flagn]<=0.005){
+        if(tmp2[i,flagn]<0.005){
             labelext = '***'
-        }else if(tmp2[i,flagn]<=0.01){
+        }else if(tmp2[i,flagn]<0.01){
             labelext = '**'
-        }else if(tmp2[i,flagn]<=0.05){
+        }else if(tmp2[i,flagn]<0.05){
             labelext= '*'
         }else{labelext=''}    
         
