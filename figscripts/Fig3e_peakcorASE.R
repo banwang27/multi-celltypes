@@ -6,11 +6,18 @@ reffed='humreffed'
 align2='human'
 output_path='/scratch/users/banwang3/celllines/scripts/RScripts/Rplots/'
 backup_path='/scratch/users/banwang3/celllines/data_backup'
+#df = read.csv('All_Peaks_withchromatin_state_info.txt',sep='\t')  
 df = read.csv('/scratch/users/banwang3/celllines/scripts/RScripts/figscripts/suppfigscripts/ATAC_counttable/Filtered/All_Peaks_withchromatin_state_info.txt',sep='\t')
+bnomial_path='/scratch/users/banwang3/celllines/scripts/RScripts/figscripts/suppfigscripts/ATAC_counttable/normalized/Normalized_binom/'
+    
 final=c()
 for (celltype in celltypes){
     dfopen = df[df$celltype==celltype,]
-    dfopen$flag = ifelse(dfopen$Human.binom_pval<0.05,'Allele-Specific Peaks','All Peaks')
+    dff = read.csv(paste0(bnomial_path,celltype,'_Humreffed_NotDown_Filtered_Normed_Binom.txt'),sep='\t')
+    dff = dff[,c('Peak.Humreffed','Binomial.p.value')]
+    dfopen = merge(dfopen,dff)    
+    #dfopen$flag = ifelse(dfopen$Human.binom_pval<0.05,'Allele-Specific Peaks','All Peaks')
+    dfopen$flag = ifelse(dfopen$Binomial.p.value<0.05,'Allele-Specific Peaks','All Peaks')
     dfopen_prom = dfopen[dfopen$type=='Promoter',]
     dfopen_enha = dfopen[dfopen$type=='Enhancer',]
     dfopen_prom$gene = str_split_fixed(dfopen_prom$Peak.Humreffed,'promoter_',2)[,2]
@@ -30,7 +37,10 @@ for (celltype in celltypes){
     #For enhancer peaks, take only the closet gene as target gene 
     dfopen_enha$gene = str_split_fixed(dfopen_enha$Peak.Humreffed,'enhancer_',2)[,2]
     dfopen_enha$gene = str_split_fixed(dfopen_enha$gene,'_',2)[,1]
-    # get gene ASE value computed by DESeq2
+    # filter out duplicated gene record, keep the lowest abs(lfc) record
+    #dfopen = dfopen[order(dfopen$gene,abs(dfopen$open_lfc)),]
+    #dfopen=dfopen[!duplicated(dfopen$gene),]
+        # get gene ASE value computed by DESeq2
     deseq2 = read.csv(paste0(backup_path,'/scratch/users/banwang3/celllines/analysis/DESeq2_norm/',align2,'/',celltype,'_aligned2human_qvalue_DESeq2.txt'),sep='\t')
     dfopen_prom = merge(dfopen_prom,deseq2,all.x=TRUE)
     dfopen_enha = merge(dfopen_enha,deseq2,all.x=TRUE)
@@ -49,7 +59,7 @@ for (celltype in celltypes){
     final=rbind(final,df4)
 }
 statenames=read.csv('/scratch/users/banwang3/celllines/scripts/RScripts/figscripts/suppfigscripts/ATAC_counttable/Filtered/All_Peaks_withchromatin_state_divergent_stat.txt',sep='\t')
-final$labelest=ifelse(final$pval<=0.005,'***',ifelse(final$pval<=0.01,'**',ifelse(final$pval<=0.05,'*','')))
+final$labelest=ifelse(final$pval<0.005,'***',ifelse(final$pval<0.01,'**',ifelse(final$pval<0.05,'*','')))
 final$paper_name=factor(final$paper_name,levels=c(statenames$paper_name))
 print(max(abs(final$pearsonr)))
 
