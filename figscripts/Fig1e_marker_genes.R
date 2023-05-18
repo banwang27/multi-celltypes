@@ -44,6 +44,7 @@ pboxplot<-function(sampleTPM){
         ylab('Expression level (TPM)')+
         theme_bw()+    
         guides(fill=guide_legend(title="Hybrid line"))+
+        theme(strip.text = element_text(face = "italic"))+
         theme(legend.position="top",panel.grid.major=element_blank(),panel.grid.minor=element_blank())
     return(p)
 }
