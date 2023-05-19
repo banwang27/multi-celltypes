@@ -1,4 +1,5 @@
 # Steps for peak calling
+Read pipeline.sh for more details.
 
 The general pipeline we follow is this:
 1. Map reads to the genome with bowtie2, then correct for mapping bias with Hornet (Bowtie, Hornet and SAM tools, see ../Mapping).
