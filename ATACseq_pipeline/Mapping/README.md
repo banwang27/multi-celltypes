@@ -8,4 +8,4 @@
 
 4. Use after_by_chr.sh then finishes this and produces the final file for peak calling.
 
-Please contact Fraser Lab at Stanford University for resulting SNP lists. This process is described in more detail in Agoglia et al. 2021.
+Please contact Fraser Lab at Stanford University for SNP lists. This process is described in more detail in Agoglia et al. 2021.
