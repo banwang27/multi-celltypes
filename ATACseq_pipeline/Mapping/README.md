@@ -1,4 +1,6 @@
-To map ATAC reads, first set up the directory as usual with the Hornet and Scripts folders, the SNPs in the analysis folder, picard.jar, the attribute file etc.
+# Steps for mapping 
+
+To map ATAC reads, first set up the directory with the Hornet and Scripts folders, the SNPs in the analysis folder, picard.jar, the attribute file etc.
 
 Next, use Snakefile and runSnake.sh to get to the rmdup.bam stage (bam file with duplicates removed).
 
