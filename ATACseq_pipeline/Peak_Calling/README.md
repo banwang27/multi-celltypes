@@ -24,7 +24,10 @@ Processing promoters:
 1. Downloaded the list of TSS from https://elifesciences.org/articles/19760.  
 2. Expanded +/- 1000 bp around the TSS and merge (with the union) any overlapping promoters and lifted over to hg38.
 3. Lifted them over to chimp and back to human and filtered out any that failed to liftover from the original list as well as the chimpanzee list.
-The list of promoters is included here.
+
+The list of promoters is included here:
+Human_Promoters_Ortho_Sorted_hg38_PanTro6.bed
+Human_Promoters_Ortho_Sorted_PanTro6_PanTro6.bed
 
 Note:
 If there is only one replicate, we need to split the bamfile. 
