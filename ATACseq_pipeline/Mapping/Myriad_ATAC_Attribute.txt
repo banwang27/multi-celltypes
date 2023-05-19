@@ -1,0 +1,17 @@
+sample_id	seqprep	species	dataOrg	seq_type	read1	read2
+ATAC11_SKM_Hyb1_Realign	yes	human	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC11_SKM_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC11_SKM_Hyb1_R2.fastq.gz
+ATAC16_HP_Hyb1_Realign	yes	human	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC16_HP_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC16_HP_Hyb1_R2.fastq.gz
+ATAC7_CM_Hyb1_Realign	yes	human	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC7_CM_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC7_CM_Hyb1_R2.fastq.gz
+ATAC8_CM_Hyb2_Realign	yes	human	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC8_CM_Hyb2_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC8_CM_Hyb2_R2.fastq.gz
+ATAC19_PP_Hyb1_Realign	yes	human	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC19_PP_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC19_PP_Hyb1_R2.fastq.gz
+ATAC20_PP_Hyb2_Realign	yes	human	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC20_PP_Hyb2_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC20_PP_Hyb2_R2.fastq.gz
+ATAC35_MN_Hyb1_Realign	yes	human	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC35_MN_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC35_MN_Hyb1_R2.fastq.gz
+ATAC36_MN_Hyb2_Realign	yes	human	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC36_MN_Hyb2_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC36_MN_Hyb2_R2.fastq.gz
+ATAC11_SKM_Hyb1_Realign	yes	chimp	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC11_SKM_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC11_SKM_Hyb1_R2.fastq.gz
+ATAC16_HP_Hyb1_Realign	yes	chimp	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC16_HP_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC16_HP_Hyb1_R2.fastq.gz
+ATAC7_CM_Hyb1_Realign	yes	chimp	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC7_CM_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC7_CM_Hyb1_R2.fastq.gz
+ATAC8_CM_Hyb2_Realign	yes	chimp	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC8_CM_Hyb2_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC8_CM_Hyb2_R2.fastq.gz
+ATAC19_PP_Hyb1_Realign	yes	chimp	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC19_PP_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC19_PP_Hyb1_R2.fastq.gz
+ATAC20_PP_Hyb2_Realign	yes	chimp	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC20_PP_Hyb2_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC20_PP_Hyb2_R2.fastq.gz
+ATAC35_MN_Hyb1_Realign	yes	chimp	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC35_MN_Hyb1_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC35_MN_Hyb1_R2.fastq.gz
+ATAC36_MN_Hyb2_Realign	yes	chimp	Ours	paired-end	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC36_MN_Hyb2_R1.fastq.gz	/scratch/users/astarr97/Myriad_ATAC_Realign/ATAC36_MN_Hyb2_R2.fastq.gz

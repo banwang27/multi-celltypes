@@ -1,0 +1,287 @@
+import os
+import pandas as pd
+
+# configfile
+configfile: 'config.yaml'
+
+##########################################################################################
+# creating job output directory
+##########################################################################################
+
+# This is because otherwise it seems to fail snakemake in some clusters.
+
+jobs_output_dir = 'job_errors'
+#benchmarks_output_dir = 'analysis/benchmarks'
+
+
+if not os.path.exists(jobs_output_dir):
+	print("Creating jobs output directory: %s" % (jobs_output_dir) )
+	os.makedirs(jobs_output_dir)
+
+#if not os.path.exists(benchmarks_output_dir):
+#	print("Creating benchmarks output directory: %s" % (benchmarks_output_dir) )
+#	os.makedirs(benchmarks_output_dir)
+
+##########################################################################################
+# constants
+##########################################################################################
+
+Rscript = "Rscript --no-restore --no-save "
+
+humanzee_env_activate = "source activate humanzee" #"source ~/miniconda3/bin/activate cfDNA"
+wasp_env_activate = "source activate wasp" #"source ~/anaconda2/bin/activate wasp"
+
+humanzee_env_deactivate = "source deactivate" #"source ~/miniconda3/bin/deactivate"
+wasp_env_deactivate = "source deactivate" #"source ~/anaconda2/bin/deactivate"
+
+changing_python_env_set = "CONDA_PATH_BACKUP=; PS1=; CONDA_OLD_PS1=;"
+
+##########################################################################################
+# data retrieval functions
+##########################################################################################
+
+#extract a column from a table, and return the table too
+def get_col(input_table,colname):
+	col_df = pd.read_csv(input_table, sep='\t'); ###changed from read_table
+	col_df.set_index(colname,inplace=True, drop=False); #add indices to the list (starts with 0)
+	return(col_df[colname].tolist(), col_df)
+
+#return a specific field of a specific sample
+def get_sample_info(samples_df, sample_id, colname):
+	return(str(samples_df.at[sample_id,colname]))
+
+#return a list of samples2attributes
+def map_samples2attributes(samples_df, colname1, colname2):
+	return({str(row[colname1]) : str(row[colname2]) for index,row in samples_df.iterrows()})
+
+def get_sample_raw_read_paths(wildcards):
+	if sample2seq_type[wildcards.sample] == 'paired-end':
+		return( { 'R1' : sample2path1[wildcards.sample],
+				'R2' : sample2path2[wildcards.sample]})
+	else: # assuming 'single-end'
+		return( { 'R1' : sample2path1[wildcards.sample]})
+
+def get_sample_raw_read_paths_trimmed(wildcards):
+	if sample2seq_type[wildcards.sample] == 'paired-end':
+		return( { 'R1': 'analysis/seqprep/' + wildcards.sample + '/r1_trimmed.fastq.gz',
+				'R2': 'analysis/seqprep/' + wildcards.sample + '/r2_trimmed.fastq.gz'})
+	else: # assuming 'single-end'
+		return({'R1': 'analysis/seqprep/' + wildcards.sample + '/r1_trimmed.fastq.gz'})
+
+def get_sample_raw_read_paths_discard(wildcards):
+	if sample2seq_type[wildcards.sample] == 'paired-end':
+		return( { 'R1': 'analysis/seqprep/' + wildcards.sample + '/r1_discard.fastq.gz',
+				'R2': 'analysis/seqprep/' + wildcards.sample + '/r2_discard.fastq.gz'})
+	else: # assuming 'single-end'
+		return({'R1': 'analysis/seqprep/' + wildcards.sample + '/r1_discard.fastq.gz'})
+
+#def get_sample_raw_read_paths_2remap(wildcards):
+#	if sample2seq_type[wildcards.sample] == 'paired-end':
+#		return( { 'R1': 'analysis/Hornet/' + wildcards.species + '/' + wildcards.sample + '/rmdup.remap.fq1.gz',
+#				'R2': 'analysis/Hornet/' + wildcards.species + '/' + wildcards.sample + '/rmdup.remap.fq2.gz'})
+#	else: # assuming 'single-end'
+#		return({'R1': 'analysis/Hornet/' + wildcards.species + '/' + wildcards.sample + '/rmdup.remap.fq1.gz'})
+
+##########################################################################################
+# load table of sample attributes
+##########################################################################################
+
+samples_filename = config['__default__']['DATA_DIR'] + '/' + config['__default__']['SET_NAME']
+dir_path = config['__default__']['DATA_DIR']
+max_len = 2000 #Default is 2000 in ATAC pipeline
+
+samples, samples_df = get_col(samples_filename,'sample_id')
+#indiv_lst = samples_df['indiv'].tolist()
+species_lst = samples_df['species'].tolist()
+#readLen_lst = samples_df['readLen'].tolist()
+
+#define the dataOrg input variable for branch points in shell commands
+dataOrg = lambda wildcards: sample2dataOrg[wildcards.sample]
+seq_prep = lambda wildcards: sample2seqprep[wildcards.sample]
+
+#create dictionaries (extract samples:attributes)
+sample2path1 = map_samples2attributes(samples_df, 'sample_id', 'read1')
+
+#You commented this out to prevent an error since this is single-end.
+sample2path2 = map_samples2attributes(samples_df, 'sample_id', 'read2')
+sample2seq_type = map_samples2attributes(samples_df, 'sample_id', 'seq_type')
+#sample2readLen = map_samples2attributes(samples_df, 'sample_id', 'readLen')
+sample2dataOrg = map_samples2attributes(samples_df, 'sample_id', 'dataOrg')
+sample2seqprep = map_samples2attributes(samples_df, 'sample_id', 'seqprep')
+
+##########################################################################################
+# all
+##########################################################################################
+
+rule all:
+	input:
+		expand('analysis/ASE/{species}/{sample}_counts.txt',zip, sample=samples,species=species_lst)
+
+##########################################################################################
+# remove adapters
+##########################################################################################
+
+rule seqprep:
+	input:
+		unpack(get_sample_raw_read_paths),
+		#R1 = sample2path1[{sample}],
+		#R2 = sample2path2[{sample}]
+	output:
+		R1 = 'analysis/seqprep/{sample}/r1_trimmed.fastq.gz',
+		R2 = 'analysis/seqprep/{sample}/r2_trimmed.fastq.gz',
+		R1d = 'analysis/seqprep/{sample}/r1_discard.fastq.gz',
+		R2d = 'analysis/seqprep/{sample}/r2_discard.fastq.gz'
+	params:
+		dataOrg = lambda wildcards: sample2dataOrg[wildcards.sample],
+		seq_type = lambda wildcards: sample2seq_type[wildcards.sample],
+		seq_prep = lambda wildcards: sample2seqprep[wildcards.sample],
+		job_out_dir  = jobs_output_dir,
+		job_out_file = "seqprep_{sample}",
+		job_name     = "SP_{sample}",
+		run_time     = "9:59:00",
+		cores        = "16",
+		memory       = "60",
+	run:
+		#(params.dataOrg == 'Ours') and (params.seq_type == 'paired-end'):
+		if (params.seq_prep == 'yes'):
+			shell("SeqPrep \
+						-f {input.R1} -r {input.R2} \
+						-1 {output.R1} -2 {output.R2} \
+						-3 {output.R1d} -4 {output.R2d} \
+					-A CTGTCTCTTATACACATCT -B CTGTCTCTTATACACATCT")
+		elif (params.seq_type == 'paired-end'):
+			shell("cp {input.R1} {output.R1} && cp {input.R2} {output.R2} && touch {output.R1d} && touch {output.R2d}")
+		else:
+			shell("cp {input.R1} {output.R1} && touch {output.R2} && touch {output.R1d} && touch {output.R2d}")
+			
+##########################################################################################
+# align to genome
+##########################################################################################
+
+rule bowtie2_align:
+	input:
+		unpack(get_sample_raw_read_paths_trimmed),
+		#R1 = 'analysis/seqprep/{species}/{sample}/r1_trimmed.fastq.gz',
+		#R2 = 'analysis/seqprep/{species}/{sample}/r2_trimmed.fastq.gz',
+	output:
+		bam='analysis/bowtie2/{species}/{sample}/Aligned.out.bam',
+	threads: 16
+	params:
+		inputs = lambda wildcards:  "{input.R1} {input.R2}" if sample2seq_type[wildcards.sample] == "paired-end" else "{input.R1}",
+		seq_type = lambda wildcards: sample2seq_type[wildcards.sample],
+		max_len = max_len,
+		job_out_dir  = jobs_output_dir,
+		job_out_file = "star1_{sample}",
+		job_name     = "S1_{sample}",
+		run_time     = "48:00:00",
+		cores        = "16",
+		memory       = "90",
+		idx_loc      = "/scratch/users/astarr97/bowtie2_indices/bowtie2_gen_{species}.idx"
+	run:
+		if (params.seq_type == 'paired-end'):
+			shell("bowtie2 \
+			-X 2000 \
+			--very-sensitive-local \
+			-p 16 \
+			-x {params.idx_loc} \
+			-1 {input.R1} \
+			-2 {input.R2} |  samtools view  -u - | samtools sort - > {output.bam} ")
+		else:
+			shell("bowtie2 \
+			-X 2000 \
+			--very-sensitive-local \
+			-p 16 \
+			-x {params.idx_loc} \
+			-U {input.R1} |  samtools view  -u - | samtools sort - > {output.bam} ")
+#Removes duplicates
+rule rmdup:
+	input: 'analysis/bowtie2/{species}/{sample}/Aligned.out.bam',
+	output: 'analysis/Mapped/{species}/{sample}/rmdup.bam',
+	params:
+		job_out_dir  = jobs_output_dir,
+		job_out_file = 'rmdup_PIC_{sample}',
+		job_name     = 'r_{sample}',
+		run_time     = "05:59:00",
+		cores        = "12",
+		memory       = "80",
+	log: "job_errors/{sample}_rmdups.log",
+	shell: """
+	java -Xms4g -jar picard.jar MarkDuplicates I={input} O={output} M={log} \
+		REMOVE_DUPLICATES=true \
+		DUPLICATE_SCORING_STRATEGY=RANDOM
+		"""
+
+#Removes reads with low confidence alignments.
+rule rmmm:
+	input: 'analysis/Mapped/{species}/{sample}/rmdup.bam',
+	output: 'analysis/Mapped/{species}/{sample}/rmdup.rmmm.bam',
+	params:
+		job_out_dir  = jobs_output_dir,
+		job_out_file = 'rmdup_PIC_{sample}',
+		job_name     = 'r_{sample}',
+		run_time     = "05:59:00",
+		cores        = "12",
+		memory       = "80",
+	shell: """
+	samtools view -b  -q 10  {input}  >  {output}
+		"""
+
+##########################################################################################
+# merge, sort and index
+##########################################################################################
+
+rule sort_keep:
+	input:
+		'analysis/Mapped/{species}/{sample}/rmdup.rmmm.bam'
+	output:
+		'analysis/Mapped/{species}/{sample}/rmdup.rmmm.sort.bam'
+	params:
+		job_out_dir  = jobs_output_dir,
+		job_out_file = "sortKeep_{sample}",
+		job_name     = "sK_{sample}",
+		run_time     = "4:59:00",
+		cores        = "16",
+		memory       = "80",
+	threads: 12
+	shell: "samtools sort {input} -o {output}"
+
+
+#index_ase
+rule index_ase:
+	input:
+		'analysis/Mapped/{species}/{sample}/rmdup.rmmm.sort.bam',
+	output:
+		'analysis/Mapped/{species}/{sample}/rmdup.rmmm.sort.bam.bai',
+	params:
+		job_out_dir  = jobs_output_dir,
+		job_out_file = "indexASE_{sample}",
+		job_name     = "i_{sample}",
+		run_time     = "2:59:00",
+		cores        = "16",
+		memory       = "60",
+	shell: "samtools index {input}"
+
+
+##########################################################################################
+# compute ASE counts
+##########################################################################################
+#https://github.com/TheFraserLab/ASEr/blob/ReadASE/bin/GetGeneASEbyReads.py
+#Intersection strict is used for consistency with GetGeneASEbyReads.py
+rule count_ase:
+	input:
+		gff='/scratch/users/astarr97/reference_ucsc/{species}.gtf',
+		reads='analysis/Mapped/{species}/{sample}/rmdup.rmmm.sort.bam',
+		readsidx='analysis/Mapped/{species}/{sample}/rmdup.rmmm.sort.bam.bai' #just so the run wouldn't start when this file is not ready yet. It is needed for the script, but the input is internal, no need to specify it
+	output:
+		'analysis/ASE/{species}/{sample}_counts.txt'
+	params:
+		job_out_dir  = jobs_output_dir,
+		job_out_file = "ASE_{sample}",
+		job_name     = "ASE_{sample}",
+		run_time     = "7:59:00",
+		cores        = "16",
+		memory       = "80",
+	threads: 16
+	shell: """
+		python -m HTSeq.scripts.count -t exon -i gene_name -s no -m intersection-strict -r pos {input.reads} {input.gff} > {output};
+		"""

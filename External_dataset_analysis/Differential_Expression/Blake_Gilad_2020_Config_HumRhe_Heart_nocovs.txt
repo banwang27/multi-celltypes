@@ -1,0 +1,7 @@
+Human_heart_RNA_61317_humreffed_counts.txt	human
+Human_heart_RNA_62789_humreffed_counts.txt	human
+Human_heart_RNA_62905_humreffed_counts.txt	human
+Rhesus_heart_RNA_YN07-314_rhereffed_counts.txt	rhesus
+Rhesus_heart_RNA_YN07-315_rhereffed_counts.txt	rhesus
+Rhesus_heart_RNA_YN07-317_rhereffed_counts.txt	rhesus
+Rhesus_heart_RNA_YN07-330_rhereffed_counts.txt	rhesus

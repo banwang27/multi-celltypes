@@ -1,0 +1,7 @@
+Human_heart_RNA_61317_humreffed_counts.txt	human
+Human_heart_RNA_62789_humreffed_counts.txt	human
+Human_heart_RNA_62905_humreffed_counts.txt	human
+Chimp_heart_RNA_4x0516_chpreffed_counts.txt	chimp
+Chimp_heart_RNA_4x0519_chpreffed_counts.txt	chimp
+Chimp_heart_RNA_YN07-147_chpreffed_counts.txt	chimp
+Chimp_heart_RNA_YN07-387_chpreffed_counts.txt	chimp
