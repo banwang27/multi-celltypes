@@ -1,6 +1,14 @@
 # Pipeline for generating high-confidence SNV lists between human and chimpanzee
 
-This is a detailed explanation of the pipeline (developed initially by Rachel M. Agoglia (RMA) and cleaned up/modified/rewritten by Alexander L. Starr (ALS)).  
+Steps for this pipeline:
+1. Scripts_For_Downloading
+2. Make_SNP_bed
+3. Filter_SNP_bed
+4. Make_INDEL_txt
+5. More_Filtering
+6. Create_Final_WASP_Files
+
+Below is a detailed explanation of the pipeline (developed initially by Rachel M. Agoglia (RMA) and cleaned up/modified/rewritten by Alexander L. Starr (ALS)).  
 ALS wrote this document and loosely adapted it from a document produced by RMA.  
 Please contact ALS with any questions (astarr97 at stanford dot edu)
 
