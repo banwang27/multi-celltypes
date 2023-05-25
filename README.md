@@ -1,6 +1,6 @@
 # Cell type-specific <em>cis</em>-regulatory divergence in gene expression and chromatin accessibility revealed by human-chimpanzee hybrid cells
 
-This is the code repositry for the paper (biorxiv link).
+This is the code repositry for the [preprint](https://www.biorxiv.org/content/10.1101/2023.05.22.541747v2).
 Data availability: [GSE232949](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE232949)
 
 ## Content
