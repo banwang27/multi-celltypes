@@ -1,0 +1,29 @@
+---
+ops: [analyze]
+model: {
+    path: /mnt/sdceph/users/humanbase/prod/humanbase-data/data/deepsea/models/sei_torch.py,
+    class: Sei,
+    class_args: {
+    },
+    non_strand_specific: mean
+}
+analyze_sequences: !obj:selene_sdk.predict.AnalyzeSequences {
+    sequence_length: 4096,
+    batch_size: 128,
+    use_cuda: True,
+    trained_model_path: /mnt/sdceph/users/humanbase/prod/humanbase-data/data/deepsea/models/sei.pth,
+    reference_sequence: !obj:selene_sdk.sequences.Genome {
+        input_path: /mnt/sdceph/users/humanbase/prod/humanbase-data/data/deepsea/genome/hg19_UCSC.fa,
+    },
+    features: !obj:selene_sdk.utils.load_features_list {
+        input_path: /mnt/sdceph/users/humanbase/prod/humanbase-data/data/deepsea/models/sei_features.txt
+    },
+    write_mem_limit: 5000
+}
+prediction: {
+    input_path: /mnt/sdceph/users/humanbase/prod/media/4b0f30fc-422d-49d7-ab7c-24238b27c0e7_human2chimp_centeratHAR_4096bp.fasta,
+    output_dir: /mnt/sdceph/users/humanbase/prod/media/,
+    output_format: tsv,
+}
+random_seed: 1337
+...
