@@ -16,4 +16,6 @@ Data availability: [GSE232949](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?ac
 
 - `Supp_figures_scripts`: Scripts used to generate supplementary figures.
 
+- `Sei_scripts`: Scripts used to do analysis involving sequence model Sei.
+
 - `data`: Processed data used for figure generation.
